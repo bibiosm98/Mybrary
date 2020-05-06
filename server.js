@@ -1,14 +1,3 @@
-// npm init
-// npm i ejs express -ejs-layouts
-// npm i --save-dev nodemon
-// npm i mongoose 
-// npm i --save-dev dotenv
-// npm i body-parser
-// npm i multer
-// npm i method-override
-//
-//
-
 if(process.env.NODE_ENV !== 'production'){
     require('dotenv').config();
 } 
