@@ -1,7 +1,31 @@
 <div class="form-row">
     <div class="form-item">
         <label>Name</label>
-        <input type="text" name="name" value="<%= author.name %>">
-        </input>
+        <input type="text" name="name" value="<%= author.name %>"></input>
     </div>
+    <div class="form-item">
+        <label>Surname</label>
+        <input type="text" name="surname" value="<%= author.surname %>"></input>
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-item">
+        <label>Country</label>
+        <select id="country" name="country" class="form-control">
+            <%- include('countryselect.ejs') %>
+        </select>
+        <% if(author.country != null) { %>
+            <script>
+                $('[name=country] option').filter(function() { 
+                    return ($(this).text() == '<%= author.country %>');
+                }).prop('selected', true); 
+            </script>
+        <% } %>
+    </div>
+    <div class="form-item">
+        <label>Born</label>
+        <input type="date" name="born" value="<%= author.born == null ? '' : author.born.toISOString().split('T')[0] %>"></input>
+    </div>
+        <!-- <label>Type of Art</label>
+        <input type="text" name="type-of-art" value="<%= //author.name %>"></input> -->
 </div>

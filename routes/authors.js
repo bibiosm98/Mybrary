@@ -2,11 +2,14 @@ const express = require('express');
 const router = express.Router();
 const Author = require('../models/author');
 const Book = require('../models/book');
+
 //All authors route
 router.get('/', async (req, res) => {
     let searchOptions = {}
     if(req.query.name != null && req.query.name !== ''){
-        searchOptions.name = new RegExp(req.query.name, 'i'); 
+        searchOptions.name = new RegExp(req.query.name, 'i');
+    }else if(req.query.country!=null){
+        searchOptions.country = req.query.country;
     }
     try{
         const authors = await Author.find(searchOptions);    
@@ -27,9 +30,14 @@ router.get('/new',(req, res)=>{
 
 //Create author route
 router.post('/', async (req, res)=>{
+    console.log(req.body);
     const author = new Author({
-        name: req.body.name
+        name: req.body.name,
+        surname: req.body.surname,
+        country: req.body.country,
+        born: new Date(req.body.born)
     })
+    console.log(author);
     try{
         const newAuthor = await author.save();
         res.redirect(`authors/${newAuthor.id}`);
@@ -68,6 +76,9 @@ router.put('/:id', async (req,res)=>{
     try{
         author = await Author.findById(req.params.id)
         author.name = req.body.name;
+        author.surname = req.body.surname;
+        author.country =  req.body.country;
+        author.born = new Date(req.body.born)
         await author.save();
         res.redirect(`/authors/${author.id}`);
     }catch{
@@ -88,8 +99,7 @@ router.delete('/:id', async (req,res)=>{
         author = await Author.findById(req.params.id)
         await author.remove();
         res.redirect(`/authors`);
-    }catch(e){
-        console.log(e);
+    }catch{
         if(author == null){
             res.redirect('/');
         }else{

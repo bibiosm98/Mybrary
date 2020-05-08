@@ -4,6 +4,15 @@ const authorSchema = new mongoose.Schema({
     name: {
         type:String,
         required:true
+    },
+    surname: {
+        type:String
+    },
+    country: {
+        type: String
+    },
+    born: {
+        type: Date
     }
 })
 

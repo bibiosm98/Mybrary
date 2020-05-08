@@ -4,6 +4,20 @@
     margin-bottom: 1rem;
 }
 
+.author-row-inner{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
 .author-name{
     font-size: 1.5rem;
+    margin-right: 2rem;
+}
+.author-surname{
+    font-size: 1.5rem;
+}
+.author-country{
+    font-size: 1.5rem;
+    margin-left: 2rem;
 }
