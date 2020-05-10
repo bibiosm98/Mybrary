@@ -37,7 +37,7 @@ router.post('/', async (req, res)=>{
         country: req.body.country,
         born: new Date(req.body.born)
     })
-    console.log(author);
+    // console.log(author);
     try{
         const newAuthor = await author.save();
         res.redirect(`authors/${newAuthor.id}`);

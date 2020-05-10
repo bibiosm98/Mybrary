@@ -1,0 +1,29 @@
+<h1>Register new user</h1>
+ 
+<form action="/signup" method="POST">
+    <div class="form-row">    
+        <div class="form-item">
+            <label>Name:</label>
+            <input type="text" name="name" value="<%=user.name%>">
+            <div class="error-message"> <%= error.errorName %> </div>
+        </div>
+        <div class="form-item">
+            <label>Email:</label>
+            <input type="email" name="email" value="<%=user.email%>">
+            <div class="error-message"> <%= error.errorEmail %> </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-item">
+            <label>Password:</label>
+            <input type="password" name="password">
+            <div class="error-message"> <%= error.errorPassword %> </div>
+        </div>
+        <div class="form-item">
+            <label>Repeat password:</label>
+            <input type="password" name="repeatPassword">
+            <div class="error-message"> <%= error.errorPassword %> </div>
+        </div>
+    </div>
+    <button class="btn btn-primary" type="submit">Create account</button>
+</form>
