@@ -8,6 +8,7 @@ const flash = require('express-flash');
 const session = require('express-session');
 const methodOverride = require('method-override');
 
+router.use(methodOverride('_method'))
 router.use(express.urlencoded({extended: false}))
 router.use(flash())
 router.use(session({
@@ -17,7 +18,15 @@ router.use(session({
 }))
 router.use(passport.initialize());
 router.use(passport.session());
-
+router.use((req, res, next) => {
+    if(req.isAuthenticated()){
+        userLogin = true;
+        req.session.initialised = true;
+        req.session.userLogin = true;
+    }
+    console.log(userLogin)
+    next();
+})
 const inicializePassport = require('./passport-config')
 inicializePassport(
     passport, 
@@ -33,21 +42,39 @@ inicializePassport(
     }
 )
 
-router.get('/', (req, res) => {
+router.get('/', checkNotAuthenticated, (req, res) => {
     res.render('../views/user/signin');
 })
 
 router.post('/',
     passport.authenticate('local', {
-        successRedirect: '/books',
-        failureRedirect: '/authors',
+        successRedirect: '/signin',
+        failureRedirect: '/',
         failureFlash: true
-    }
-))
+    })
+)
 
-router.delete('/logout', (req, res) =>{
-    req.logOut();
+router.delete('/', async (req, res) =>{
+    console.log("Logout delete")
+    if(!req.isAuthenticated()){}
+    userLogin = false;
+    await req.logOut();
+    // req.session.destroy();
     res.redirect('/'); 
 })
+
+
+function checkAuthenticated(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect('/signin');
+}
+function checkNotAuthenticated(req, res, next){
+    if(req.isAuthenticated()){
+        return res.redirect('/');
+    }
+    return next();
+}
 
 module.exports = router;

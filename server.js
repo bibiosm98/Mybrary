@@ -1,7 +1,7 @@
 if(process.env.NODE_ENV !== 'production'){
     require('dotenv').config();
 } 
-
+global.userLogin = false;
 const express = require('express');
 const app = express();
 const expressLayouts = require('express-ejs-layouts');
@@ -38,8 +38,10 @@ app.use('/', indexRouter);
 app.use('/authors', authorRouter); 
 app.use('/books', bookRouter); 
 app.use('/signup', signupRouter); 
-app.use('/signin', signinRouter); 
-
+app.use('/signin', signinRouter);
+app.use((req, res) => {
+    req.userLogged = false;
+})
 
 app.use(express.urlencoded({extended: false}))
 app.use(flash())
@@ -50,7 +52,6 @@ app.use(session({
 }))
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 
 app.listen(process.env.PORT || 3000); 

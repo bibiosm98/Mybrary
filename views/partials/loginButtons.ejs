@@ -1,0 +1,9 @@
+<% if(!userLogin) { %>
+    <li><a class="btn" href="/signin">Sign in</a></li>
+    <li><a class="btn" href="/signup">Sign up</a></li>
+<% } else { %>
+    <!-- <li><a class="btn btn-danger" href="/logout">Log out</a></li> -->
+    <form action="/signin?_method=DELETE" method="POST">
+        <button class="btn btn-danger" type="submit">Log out</button>
+    </form>
+<% } %>
