@@ -24,7 +24,7 @@ router.use((req, res, next) => {
         req.session.initialised = true;
         req.session.userLogin = true;
     }
-    console.log(userLogin)
+    // console.log(userLogin)
     next();
 })
 const inicializePassport = require('./passport-config')
@@ -55,7 +55,7 @@ router.post('/',
 )
 
 router.delete('/', async (req, res) =>{
-    console.log("Logout delete")
+    // console.log("Logout delete")
     if(!req.isAuthenticated()){}
     userLogin = false;
     await req.logOut();
