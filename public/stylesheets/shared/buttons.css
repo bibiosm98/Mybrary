@@ -1,7 +1,8 @@
 :root{
     --color-btn-primary-background: hsl(var(--color-base-hue), 100%, 83%);
     --color-btn-primary-background-dark: hsl(var(--color-base-hue), 100%, 73%);
-    --color-btn-primary-text: hsl(var(--color-base-hue), 100%, 20%);
+    --color-btn-primary-disabled-background-dark: hsl(var(--color-base-hue), 100%, 23%);
+    --color-btn-primary-text: hsl(var(--color-base-hue), 100%, 30%);
     --color-btn-primary-text-dark: hsl(var(--color-base-hue), 100%, 10%);
     --color-btn-border: black;
     --color-btn-danger-background: hsl(var(--color-danger-hue), 100%, 83%);
@@ -33,6 +34,10 @@
 .btn-primary{
     color: var(--color-btn-primary-text);
     background-color: var(--color-btn-primary-background-dark);
+}
+.btn-primary-disabled{
+    color: var(--color-btn-primary-text);
+    background-color: var(--color-btn-primary-disabled-background-dark);
 }
 .btn-primary:hover{
     color: var(--color-btn-primary-text-dark);

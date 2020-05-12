@@ -3,8 +3,17 @@ const router = express.Router();
 const Author = require('../models/author');
 const Book = require('../models/book');
 
+const session = require('express-session');
+router.use(session({
+    secret:process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+}))
+
 //All authors route
 router.get('/', async (req, res) => {
+    chechUserLoggedIn(req, res);
+    
     let searchOptions = {}
     if(req.query.name != null && req.query.name !== ''){
         searchOptions.name = new RegExp(req.query.name, 'i');
@@ -24,12 +33,15 @@ router.get('/', async (req, res) => {
 
 
 // New author route
-router.get('/new',(req, res)=>{
+router.get('/new',(req, res)=>{ 
+    chechUserLoggedIn(req, res);
     res.render('authors/new', {author: new Author});
 });
 
 //Create author route
 router.post('/', async (req, res)=>{
+    chechUserLoggedIn(req, res);
+
     console.log(req.body);
     const author = new Author({
         name: req.body.name,
@@ -50,6 +62,8 @@ router.post('/', async (req, res)=>{
 }); 
 
 router.get('/:id', async (req, res) =>{
+    chechUserLoggedIn(req, res);
+
     try{
         const author = await Author.findById(req.params.id);
         const books = await Book.find({author: author.id}).limit(6).exec();
@@ -63,6 +77,8 @@ router.get('/:id', async (req, res) =>{
 })
 
 router.get('/:id/edit', async (req,res) =>{
+    chechUserLoggedIn(req, res);
+
     try{
         const author = await Author.findById(req.params.id);
         res.render('authors/edit', {author: author});
@@ -72,6 +88,8 @@ router.get('/:id/edit', async (req,res) =>{
 })
 
 router.put('/:id', async (req,res)=>{
+    chechUserLoggedIn(req, res);
+
     let author;
     try{
         author = await Author.findById(req.params.id)
@@ -94,6 +112,8 @@ router.put('/:id', async (req,res)=>{
 }); 
 
 router.delete('/:id', async (req,res)=>{
+    chechUserLoggedIn(req, res);
+
     let author;
     try{
         author = await Author.findById(req.params.id)
@@ -108,5 +128,11 @@ router.delete('/:id', async (req,res)=>{
     }
 });  
 
+
+function chechUserLoggedIn(req, res){ 
+  if(req.session.user){
+    res.locals.userLoggedIn = true;
+  }
+}
 
 module.exports = router; 

@@ -20,13 +20,13 @@ router.use(passport.initialize());
 router.use(passport.session());
 router.use((req, res, next) => {
     if(req.isAuthenticated()){
-        userLogin = true;
-        req.session.initialised = true;
-        req.session.userLogin = true;
+        res.locals.userLoggedIn = true;
+    }else{
+        res.locals.userLoggedIn = false;
     }
-    // console.log(userLogin)
     next();
 })
+
 const inicializePassport = require('./passport-config')
 inicializePassport(
     passport, 
@@ -43,6 +43,9 @@ inicializePassport(
 )
 
 router.get('/', checkNotAuthenticated, (req, res) => {
+    if(req.isAuthenticated()){
+        res.locals.userLoggedIn = true;
+    }
     res.render('../views/user/signin');
 })
 
@@ -54,12 +57,10 @@ router.post('/',
     })
 )
 
-router.delete('/', async (req, res) =>{
-    // console.log("Logout delete")
-    if(!req.isAuthenticated()){}
-    userLogin = false;
-    await req.logOut();
-    // req.session.destroy();
+router.delete('/', (req, res) => {
+    req.logOut();
+    res.locals.userLoggedIn = false;
+    req.session.destroy();
     res.redirect('/'); 
 })
 
@@ -70,8 +71,11 @@ function checkAuthenticated(req, res, next){
     }
     res.redirect('/signin');
 }
+
 function checkNotAuthenticated(req, res, next){
     if(req.isAuthenticated()){
+        res.locals.userLoggedIn = true;
+        req.session.user = true;
         return res.redirect('/');
     }
     return next();

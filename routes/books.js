@@ -4,9 +4,18 @@ const Book = require('../models/book')
 const Author = require('../models/author')
 const imageMimeTypes = ['image/jpeg', 'image/png', 'images/gif']
 
+const session = require('express-session');
+router.use(session({
+    secret:process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+}))
+
 // All Books Route
 router.get('/', async (req, res) => {
+  chechUserLoggedIn(req, res);
   let query = Book.find()
+  
   if (req.query.title != null && req.query.title != '') {
     query = query.regex('title', new RegExp(req.query.title, 'i'))
   }
@@ -29,11 +38,13 @@ router.get('/', async (req, res) => {
 
 // New Book Route
 router.get('/new', async (req, res) => {
+  chechUserLoggedIn(req, res);
   renderNewPage(res, new Book())
 })
 
 // Create Book Route
 router.post('/', async (req, res) => {
+  chechUserLoggedIn(req, res);
   const book = new Book({
     title: req.body.title,
     author: req.body.author,
@@ -53,6 +64,7 @@ router.post('/', async (req, res) => {
 
 //show book route
 router.get('/:id', async(req,res)=>{
+  chechUserLoggedIn(req, res);
   try{
     const book = await Book.findById(req.params.id).populate('author').exec();
     res.render('books/show', {book, book})
@@ -63,6 +75,7 @@ router.get('/:id', async(req,res)=>{
 
 //edit book route
 router.get('/:id/edit', async (req, res) => {
+  chechUserLoggedIn(req, res);
   try{
     const book = await Book.findById(req.params.id);
     renderEditPage(res, book);
@@ -73,6 +86,7 @@ router.get('/:id/edit', async (req, res) => {
 
 //update book route
 router.put('/:id', async (req, res) => {
+  chechUserLoggedIn(req, res);
   let book;
   try {
       book = await Book.findById(req.params.id)
@@ -98,6 +112,7 @@ router.put('/:id', async (req, res) => {
 
 //delete Book Page
 router.delete('/:id', async (req,res) =>{
+  chechUserLoggedIn(req, res);
   let book;
   try{
     book = await Book.findById(req.params.id);
@@ -145,6 +160,12 @@ function saveCover(book, coverEncoded) {
   if (cover != null && imageMimeTypes.includes(cover.type)) {
     book.coverImage = new Buffer.from(cover.data, 'base64')
     book.coverImageType = cover.type
+  }
+}
+
+function chechUserLoggedIn(req, res){ 
+  if(req.session.user){
+    res.locals.userLoggedIn = true;
   }
 }
 
