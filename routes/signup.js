@@ -68,7 +68,9 @@ router.post('/', async (req, res) =>{
 
             try{
                 let transport;
+                let link;
                 if(process.env.NODE_ENV !== 'production'){
+                    link = `http://localhost:3000`;
                     transport = nodemailer.createTransport({
                         host: 'smtp.mailtrap.io',
                         port: 2525,  //25 or 465 or 587 or 2525
@@ -78,6 +80,7 @@ router.post('/', async (req, res) =>{
                         }
                     });
                 }else{
+                    link = `https://dashboard.heroku.com/apps/mybrary-try`;
                     transport = nodemailer.createTransport({
                         host: process.env.GMAIL_HOST,
                         port: process.env.GMAIL_PORT,
@@ -88,7 +91,7 @@ router.post('/', async (req, res) =>{
                     });
                 }
 
-                const link = `http://localhost:3000/signup/${newUser.id}/verify`
+                link += `/signup/${newUser.id}/verify`
                 const message = {
                     from: process.env.MAIL_LOGIN, // Sender address
                     to: 'bibiosm98@gmail.com',         // List of recipients
