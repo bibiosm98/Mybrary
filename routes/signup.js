@@ -80,7 +80,7 @@ router.post('/', async (req, res) =>{
                         }
                     });
                 }else{
-                    link = `https://dashboard.heroku.com/apps/mybrary-try`;
+                    link = `https://mybrary-try.herokuapp.com`;
                     transport = nodemailer.createTransport({
                         host: process.env.GMAIL_HOST,
                         port: process.env.GMAIL_PORT,
