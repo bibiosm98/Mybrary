@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const userSchema = new mongoose.Schema({
+const newUserSchema = new mongoose.Schema({
     name: {
         type: String,
         required:true
@@ -16,11 +16,7 @@ const userSchema = new mongoose.Schema({
       type: Date,
       required: true,
       default: Date.now
-    },
-    verify:{
-        type: Boolean,
-        default: false
     }
 })
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('NewUser', newUserSchema);

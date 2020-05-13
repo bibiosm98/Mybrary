@@ -4,6 +4,7 @@ if(process.env.NODE_ENV !== 'production'){
 const express = require('express')
 const router = express.Router()
 const User = require('../models/user')
+const NewUser = require('../models/newUser')
 const UserError = require('../models/userError')
 
 const bcrypt = require('bcrypt');
@@ -64,8 +65,14 @@ router.post('/', async (req, res) =>{
     if(userCorrectData){
         try{
             user.password = await bcrypt.hash(req.body.password, 10);
-            const newUser = await user.save();
+            // const newUser = await user.save();
 
+            const newUser = await new NewUser({
+                name: user.name,
+                email: user.email,
+                password: user.password,
+            }).save()
+            console.log(newUser)
             try{
                 let transport;
                 let link;
@@ -94,7 +101,7 @@ router.post('/', async (req, res) =>{
                 link += `/signup/${newUser.id}/verify`
                 const message = {
                     from: process.env.MAIL_LOGIN, // Sender address
-                    to: 'bibiosm98@gmail.com',         // List of recipients
+                    to: newUser.email,         // List of recipients
                     subject: 'Mybrary account authentication', // Subject line
                     html: `<h1>Thanks you for creating free Mybrary account</h1><p>Your activation link is below <br><a href="${link}">Click Here</p>` // Plain text body
                 };
@@ -128,9 +135,18 @@ router.post('/', async (req, res) =>{
 router.get('/:id/verify', async (req, res) =>{
     chechUserLoggedIn(req, res);
     try{
-        const user = await (await User.findById(req.params.id)).updateOne({verify: true});
-        // const user2 = (await User.findById(req.params.id));
-        res.redirect('/');
+        const user = await NewUser.findById(req.params.id) //.updateOne({verify: true});
+        const user2 = await new User({
+            name: user.name,
+            email: user.email,
+            password: user.password,
+            verify: true
+        }).save()
+        if(user2.name === user.name){
+            console.log(user2)
+            user.remove()
+        }
+        res.redirect('/signin');
     }catch{
         res.redirect('/');
     }

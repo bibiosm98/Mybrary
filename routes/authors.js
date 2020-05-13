@@ -45,7 +45,7 @@ router.get('/new',(req, res)=>{
 router.post('/', async (req, res)=>{
     chechUserLoggedIn(req, res);
 
-    console.log(req.body);
+    // console.log(req.body);
     const author = new Author({
         name: req.body.name,
         surname: req.body.surname,
