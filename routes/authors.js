@@ -10,6 +10,10 @@ router.use(session({
     saveUninitialized: false
 }))
 
+if(process.env.NODE_ENV !== 'production'){
+    require('dotenv').config();
+}
+const nodemailer = require('nodemailer')
 //All authors route
 router.get('/', async (req, res) => {
     chechUserLoggedIn(req, res);
@@ -30,7 +34,6 @@ router.get('/', async (req, res) => {
         res.redirect('/');
     }
 });
-
 
 // New author route
 router.get('/new',(req, res)=>{ 

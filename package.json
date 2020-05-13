@@ -16,6 +16,7 @@
     "cookie-session": "^1.4.0",
     "ejs": "^3.1.2",
     "ejs-layouts": "0.0.1",
+    "email-existence": "^0.1.6",
     "express": "^4.17.1",
     "express-ejs-layouts": "^2.5.0",
     "express-flash": "0.0.2",
@@ -23,6 +24,7 @@
     "fs": "0.0.1-security",
     "method-override": "^3.0.0",
     "mongoose": "^5.9.11",
+    "nodemailer": "^6.4.6",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0"
   },

@@ -7,6 +7,9 @@ function initialize(passport, getUserByEmail, getUserById){
         if(user == null){
             return done(null, false, "No user with that email");
         }
+        if(user.verify == false){
+            return done(null, false, "Check your email to verify account");
+        }
 
         try{
             if(await bcrypt.compare(password, user.password)){
